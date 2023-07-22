@@ -1,0 +1,162 @@
+openapi: 3.0.3
+info:
+  title: Todo API
+  version: 0.1.0
+servers:
+  - url: http://localhost:8080/api
+tags:
+  - name: users
+    description: User operations
+  - name: todos
+    description: Todo item operations
+paths:
+  /users:
+    post:
+      tags:
+        - users
+      summary: Create user
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  required:
+                    - username
+                    - password
+                  properties:
+                    password:
+                      type: string
+                      example: 123456
+                - $ref: '#/components/schemas/User'
+      responses:
+        201:
+          description: New user is successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        401:
+          description: Unauthorized
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Logs user into the system
+      operationId: loginUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  example: admin
+                password:
+                  type: string
+                  example: 123456
+      responses:
+        200:
+          description: New token is successfully generated
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - token
+                properties:
+                  token:
+                    type: string
+                    readOnly: true
+        400:
+          description: Invalid username/password supplied
+  /todos:
+    post:
+      tags:
+        - todos
+      summary: Create todo item
+      operationId: createTodo
+      security:
+        - jwt: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Todo'
+      responses:
+        201:
+          description: New todo item is successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        401:
+          description: Unauthorized
+    get:
+      tags:
+        - todos
+      summary: Get all todo items
+      operationId: getTodos
+      security:
+        - jwt: [ ]
+      responses:
+        200:
+          description: Todo items are successfully retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Todo'
+        401:
+          description: Unauthorized
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - username
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          example: 1
+        username:
+          type: string
+          example: admin
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+          example: 2023-07-22 09:29:00
+    Todo:
+      type: object
+      required:
+        - task
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          example: 1
+        task:
+          type: string
+          example: Buy milk
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+          example: 2023-07-22 09:29:00
+        user:
+          readOnly: true
+          allOf:
+            - $ref: '#/components/schemas/User'
+  securitySchemes:
+    jwt:
+      type: apiKey
+      name: Authorization
+      in: header
