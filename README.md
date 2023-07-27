@@ -11,3 +11,9 @@ Start REST API:
 ```bash
 make start-rest-api
 ```
+
+Start GraphQL API:
+
+```bash
+make start-graphql-api
+```

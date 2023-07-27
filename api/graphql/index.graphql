@@ -1,0 +1,28 @@
+scalar DateTime
+
+type User {
+    id: ID!,
+    username: String!,
+    createdAt: DateTime!
+}
+
+type Todo {
+    id: ID!,
+    task: String!,
+    createdAt: DateTime!
+    user: User!
+}
+
+type Token {
+    token: String!
+}
+
+type Mutation {
+    login(username: String!, password: String!): Token!
+    createUser(username: String!, password: String!): User!
+    createTodo(task: String!): Todo!
+}
+
+type Query {
+    todos: [Todo!]!
+}

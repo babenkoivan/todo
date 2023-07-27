@@ -1,6 +1,7 @@
 package users
 
 import (
+	"encoding/json"
 	"github.com/babenkoivan/todo/internal/db"
 	"github.com/babenkoivan/todo/internal/jwt"
 	"golang.org/x/crypto/bcrypt"
@@ -44,6 +45,18 @@ func (u *User) Login() (string, error) {
 	u.Password = hash
 
 	return jwt.GenerateToken(u.Username), nil
+}
+
+func (u *User) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		ID        int64
+		Username  string
+		CreatedAt time.Time
+	}{
+		ID:        u.ID,
+		Username:  u.Username,
+		CreatedAt: u.CreatedAt,
+	})
 }
 
 func Authenticate(tokenString string) (*User, error) {

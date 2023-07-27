@@ -11,6 +11,8 @@ destroy-db: ## Destroy the database container
 	@sh scripts/destroy-db.sh
 start-rest-api: ## Start REST API server
 	@sh scripts/start-rest-api.sh
+start-graphql-api: ## Start GraphQL API server
+	@sh scripts/start-graphql-api.sh
 
 help: ## Show help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
