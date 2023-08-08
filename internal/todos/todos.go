@@ -22,17 +22,24 @@ func (t *Todo) Create() {
 	t.CreatedAt = now
 }
 
-func GetAll(user *users.User) []Todo {
-	todos := make([]Todo, 0)
+func GetAll(user *users.User) []*Todo {
+	todos := make([]*Todo, 0)
 
 	res, _ := db.Connection.Query("SELECT id, task, created_at FROM todos WHERE user_id = ?", user.ID)
 	defer res.Close()
 
 	for res.Next() {
-		todo := Todo{User: user}
+		todo := &Todo{User: user}
 		res.Scan(&todo.ID, &todo.Task, &todo.CreatedAt)
 		todos = append(todos, todo)
 	}
 
 	return todos
+}
+
+func NewTodo(task string, user *users.User) *Todo {
+	return &Todo{
+		Task: task,
+		User: user,
+	}
 }

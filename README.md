@@ -6,14 +6,20 @@ Start the database:
 make start-db
 ```
 
-Start REST API:
+Start REST API server:
 
 ```bash
-make start-rest-api
+make start-rest-server
 ```
 
-Start GraphQL API:
+Start GraphQL API server:
 
 ```bash
-make start-graphql-api
+make start-graphql-server
+```
+
+Start gRPC server:
+
+```bash
+make start-grpc-server
 ```

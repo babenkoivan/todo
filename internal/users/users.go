@@ -70,3 +70,10 @@ func Authenticate(tokenString string) (*User, error) {
 	err = res.Scan(&user.ID, &user.Username, &user.Password, &user.CreatedAt)
 	return &user, err
 }
+
+func NewUser(username, password string) *User {
+	return &User{
+		Username: username,
+		Password: password,
+	}
+}

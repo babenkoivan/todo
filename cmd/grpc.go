@@ -3,8 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/babenkoivan/todo/internal/db"
-	"github.com/babenkoivan/todo/internal/graphql"
-	"net/http"
+	"github.com/babenkoivan/todo/internal/grpc"
 	"os"
 )
 
@@ -17,6 +16,5 @@ func main() {
 	)
 	defer db.CloseConnection()
 
-	http.HandleFunc("/api", graphql.ProcessRequest)
-	http.ListenAndServe(fmt.Sprintf(":%s", os.Getenv("APP_PORT")), nil)
+	grpc.StartServer("tcp", fmt.Sprintf(":%s", os.Getenv("APP_PORT")))
 }
