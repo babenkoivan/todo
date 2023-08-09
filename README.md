@@ -41,7 +41,7 @@ You can use `Postman` to perform all types of queries: just import desired API d
 
 The default base URL for REST API and GraphQL is `localhost:8080/api`, and `localhost:8080` for gRPC. The authentication token received via `login` action can be provided in the `Authorization` header.
 
-Below you can find the demonstration of the application using three different interfaces. 
+Below you can find a demonstration of the application using three different interfaces. 
 
 ### REST API
 
