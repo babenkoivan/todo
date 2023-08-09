@@ -13,13 +13,20 @@ type Todo struct {
 	User      *users.User
 }
 
-func (t *Todo) Create() {
+func (t *Todo) Create() error {
 	now := time.Now().UTC()
-	res, _ := db.Connection.Exec("INSERT INTO todos (user_id, task, created_at) VALUES (?, ?, ?)", t.User.ID, t.Task, now)
+	res, err := db.Connection.Exec("INSERT INTO todos (user_id, task, created_at) VALUES (?, ?, ?)", t.User.ID, t.Task, now)
+
+	if err != nil {
+		return err
+	}
+
 	id, _ := res.LastInsertId()
 
 	t.ID = id
 	t.CreatedAt = now
+
+	return nil
 }
 
 func GetAll(user *users.User) []*Todo {

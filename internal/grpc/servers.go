@@ -12,6 +12,11 @@ import (
 	"net"
 )
 
+var (
+	errInvalidCredentials = status.Errorf(codes.NotFound, "incorrect username/password")
+	errInvalidInput       = status.Errorf(codes.InvalidArgument, "invalid or duplicated input")
+)
+
 type userServiceServer struct {
 }
 
@@ -20,7 +25,7 @@ func (u *userServiceServer) Login(ctx context.Context, request *LoginRequest) (*
 	token, err := user.Login()
 
 	if err != nil {
-		return nil, status.Errorf(codes.NotFound, "incorrect username/password")
+		return nil, errInvalidCredentials
 	}
 
 	return newTokenResponse(token), nil
@@ -28,9 +33,13 @@ func (u *userServiceServer) Login(ctx context.Context, request *LoginRequest) (*
 
 func (u *userServiceServer) Create(ctx context.Context, request *UserRequest) (*UserResponse, error) {
 	user := users.NewUser(request.Username, request.Password)
-	user.Create()
+	err := user.Create()
 
-	return newUserResponse(user), nil
+	if err != nil {
+		return nil, errInvalidInput
+	}
+
+	return newUserResponse(user), err
 }
 
 func (u *userServiceServer) mustEmbedUnimplementedUserServiceServer() {
@@ -42,7 +51,11 @@ type todoServiceServer struct {
 func (t *todoServiceServer) Create(ctx context.Context, request *TodoRequest) (*TodoResponse, error) {
 	user := getUser(ctx)
 	todo := todos.NewTodo(request.Task, user)
-	todo.Create()
+	err := todo.Create()
+
+	if err != nil {
+		return nil, errInvalidInput
+	}
 
 	return newTodoResponse(todo), nil
 }

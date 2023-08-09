@@ -37,6 +37,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+        400:
+          description: Bad request
         401:
           description: Unauthorized
   /users/login:
@@ -95,6 +97,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Todo'
+        400:
+          description: Bad request
         401:
           description: Unauthorized
     get:

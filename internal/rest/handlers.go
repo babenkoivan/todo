@@ -14,7 +14,13 @@ func CreateUser(ctx *gin.Context) {
 		return
 	}
 
-	user.Create()
+	err := user.Create()
+
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
 	ctx.JSON(http.StatusCreated, user)
 }
 
@@ -43,7 +49,13 @@ func CreateTodo(ctx *gin.Context) {
 	}
 
 	todo.User = getUser(ctx)
-	todo.Create()
+	err := todo.Create()
+
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
 	ctx.JSON(http.StatusOK, todo)
 }
 

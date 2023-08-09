@@ -15,16 +15,22 @@ type User struct {
 	CreatedAt time.Time `json:"createdAt"`
 }
 
-func (u *User) Create() {
+func (u *User) Create() error {
 	now := time.Now().UTC()
 	hash, _ := bcrypt.GenerateFromPassword([]byte(u.Password), 14)
+	res, err := db.Connection.Exec("INSERT INTO users (username, password, created_at) VALUES (?, ?, ?)", u.Username, string(hash), now)
 
-	res, _ := db.Connection.Exec("INSERT INTO users (username, password, created_at) VALUES (?, ?, ?)", u.Username, string(hash), now)
+	if err != nil {
+		return err
+	}
+
 	id, _ := res.LastInsertId()
 
 	u.ID = id
 	u.Password = string(hash)
 	u.CreatedAt = now
+
+	return nil
 }
 
 func (u *User) Login() (string, error) {

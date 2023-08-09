@@ -25,9 +25,9 @@ func login(params graphql.ResolveParams) (interface{}, error) {
 
 func createUser(params graphql.ResolveParams) (interface{}, error) {
 	user := users.NewUser(params.Args["username"].(string), params.Args["password"].(string))
-	user.Create()
+	err := user.Create()
 
-	return user, nil
+	return user, err
 }
 
 func createTodo(params graphql.ResolveParams) (interface{}, error) {
@@ -38,9 +38,9 @@ func createTodo(params graphql.ResolveParams) (interface{}, error) {
 	}
 
 	todo := todos.NewTodo(params.Args["task"].(string), user)
-	todo.Create()
+	err := todo.Create()
 
-	return todo, nil
+	return todo, err
 }
 
 func getTodos(params graphql.ResolveParams) (interface{}, error) {
